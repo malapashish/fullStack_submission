@@ -28,9 +28,7 @@ const App = () => {
             <Buttons handlerFunction = {handleNeutralClick} text = "Neutral" />
             <Buttons handlerFunction = {handleBadClick} text = "Bad" />
         <h1>Statistics</h1>
-        <Statistics text = "Good" count = {good} />
-        <Statistics text = "Neutral" count = {neutral} />
-        <Statistics text = "Bad" count = {bad} />
+        <Statistics good = {good} neutral = {neutral} bad = {bad} /> 
     </div>
   )
 }
