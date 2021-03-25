@@ -1,5 +1,11 @@
-.statistics {
-  display: flex;
-  flex-direction: column;
-  line-height: 0.5px;
+table {
+  width: 8%;
+}
+
+.text {
+  text-align: left;
+}
+
+.value {
+  text-align: right;
 }

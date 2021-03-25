@@ -1,10 +1,10 @@
 import React from 'react';
-import "../App.css"
+import Statistic from './Statistic';
 
 const Statistics = ({good , neutral , bad}) => {
     let total = good + neutral + bad;
-    let average = (good * 1 + neutral * 0 + bad * -1) / total;
-    let postiveFeedback = ( good / total ) * 100;
+    let average = ((good * 1 + neutral * 0 + bad * -1) / total).toFixed(1);
+    let postiveFeedback = `${(( good / total ) * 100).toFixed(1)}%`;
 
     if(total === 0){
         return(
@@ -15,15 +15,15 @@ const Statistics = ({good , neutral , bad}) => {
     }
 
 
-    return(
-       <div className = "statistics">
-       <p>Good {good}</p> 
-       <p>Neutral {neutral}</p> 
-       <p>Bad {bad}</p> 
-       <p>All {total}</p> 
-       <p>Average {average}</p> 
-       <p>Postive Feedback {postiveFeedback} %</p> 
-       </div>
+    return( 
+        <>
+            <Statistic text = "Good" value = {good} />   
+            <Statistic text = "Neutral" value = {neutral} /> 
+            <Statistic text = "Bad" value = {bad} /> 
+            <Statistic text = "All" value = {total} /> 
+            <Statistic text = "Average" value = {average} />  
+            <Statistic text = "Postive" value = {postiveFeedback} />   
+        </>
     );
 }
 
