@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 
 import Button from "./components/Button" 
 import Display from "./components/Display"
+import Votes from './components/Votes';
 
 const App = () => {
   const anecdotes = [
@@ -35,14 +36,25 @@ const App = () => {
       })
   }
   
-  console.log(votes);
+  const highestVotes = () => {
+    let highestVote = Object.values(votes).reduce((t , n) => t > n ? t : n); 
+    for(const vote in votes){
+        if(votes[vote] === highestVote){ 
+          return vote;
+        } 
+    } 
+  } 
 
   return (
     <div>
-      <Display text = {anecdotes[selected]} /> 
-      <Display text = {votes[selected]} />
+      <h1>Anecdote of the day</h1>
+      <Display text = {anecdotes[selected]} />  
+      <Votes vote = {votes[selected]} />
       <Button onClickHandler={onClickVote} text = "Vote" /> 
       <Button onClickHandler={onClickHandler} text = "Next Anecdote" />
+      <h1>Anecdote with most votes</h1>
+      <Display text = {anecdotes[highestVotes()]} />  
+      <Votes vote = {votes[highestVotes()]} />
     </div>
   )
 }
