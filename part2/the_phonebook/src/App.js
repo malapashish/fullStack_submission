@@ -4,8 +4,9 @@ import { v4 as uuidv4 } from 'uuid';
 const App = () => {
   const [ persons, setPersons ] = useState([]);
   const [ newName, setNewName ] = useState('');
+  const [ newNumber , setNewNumber ] = useState([]);
 
-  const handlePhonebookChange = (event) => {
+  const handleNameChange = (event) => {
     setNewName(event.target.value);
     persons.forEach((person) => {
       if(person.name === event.target.value){
@@ -15,15 +16,19 @@ const App = () => {
     }) 
   };
  
-
+  const handleNumberChange = (event) => {
+    setNewNumber(event.target.value);
+  }
 
   const onContactSubmit = (event) => {  
     event.preventDefault();
     const contactObject = {
         name : newName,
+        number : newNumber
     }
     setPersons(persons.concat(contactObject));
     setNewName('');
+    setNewNumber('');
   };
  
 
@@ -32,7 +37,10 @@ const App = () => {
       <h2>Phonebook</h2>
       <form onSubmit={onContactSubmit}>
         <div>
-          Name: <input value = {newName} onChange = {handlePhonebookChange} />
+          Name: <input value = {newName} onChange = {handleNameChange} /> 
+        </div>
+        <div>
+          Number : <input value = {newNumber} onChange = {handleNumberChange}  />
         </div>
         <div>
           <button type="submit">Add</button>
@@ -43,7 +51,7 @@ const App = () => {
           {
               persons.map(person => 
                 <li key = {uuidv4()}>
-                    {person.name}
+                    {person.name} {person.number}
                 </li>
               )
           }
