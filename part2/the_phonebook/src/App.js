@@ -10,8 +10,7 @@ const App = () => {
   ]);
   const [ newName, setNewName ] = useState('');
   const [ filterName , setFilterName ] = useState('');
-  const [ newNumber , setNewNumber ] = useState([]);
-  const [ filterStatus , setFilterStatus] = useState(false); 
+  const [ newNumber , setNewNumber ] = useState([]); 
 
   const handleNameChange = (event) => {
     setNewName(event.target.value);
@@ -19,11 +18,10 @@ const App = () => {
  
 
   const filterNameList = (event) => {
-    setFilterName(event.target.value);
-    setFilterStatus(false);
+    setFilterName(event.target.value); 
   }
 
-  const filterList = filterStatus ? persons : persons.filter(person => person.name.toUpperCase().includes(filterName.toUpperCase()))
+  const filterList = persons.filter(person => person.name.toUpperCase().includes(filterName.toUpperCase()))
 
   const handleNumberChange = (event) => {
     setNewNumber(event.target.value); 
