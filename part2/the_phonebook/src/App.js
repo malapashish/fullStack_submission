@@ -2,34 +2,40 @@ import React, { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid';
 
 const App = () => {
-  const [ persons, setPersons ] = useState([
-    { name: 'Arto Hellas' }
-  ]) 
-  const [ newName, setNewName ] = useState('')
+  const [ persons, setPersons ] = useState([]);
+  const [ newName, setNewName ] = useState('');
 
-  const handlePhonebookChange = (event) =>{
-      console.log(event.target.value);
-      setNewName(event.target.value);
-  }
-
-  const onContactSubmit = (event) => {
-      event.preventDefault();
-      const contactObject = {
-            name : newName
+  const handlePhonebookChange = (event) => {
+    setNewName(event.target.value);
+    persons.forEach((person) => {
+      if(person.name === event.target.value){
+        alert(`${event.target.value} is already added to phonebook`)
+        setNewName('');
       }
-      setPersons(persons.concat(contactObject))
-      setNewName('');
-  }
+    }) 
+  };
+ 
+
+
+  const onContactSubmit = (event) => {  
+    event.preventDefault();
+    const contactObject = {
+        name : newName,
+    }
+    setPersons(persons.concat(contactObject));
+    setNewName('');
+  };
+ 
 
   return (
     <div>
       <h2>Phonebook</h2>
       <form onSubmit={onContactSubmit}>
         <div>
-          name: <input value = {newName} onChange = {handlePhonebookChange} />
+          Name: <input value = {newName} onChange = {handlePhonebookChange} />
         </div>
         <div>
-          <button type="submit">add</button>
+          <button type="submit">Add</button>
         </div>
       </form>
       <h2>Numbers</h2>
@@ -41,7 +47,7 @@ const App = () => {
                 </li>
               )
           }
-      </ul>
+      </ul> 
     </div>
   )
 }
