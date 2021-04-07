@@ -1,5 +1,8 @@
-import React, { useState} from 'react'
-import { v4 as uuidv4 } from 'uuid';
+import React, { useState} from 'react';
+
+import Filter from './components/Filter';
+import PersonForm from './components/PersonForm';
+import PersonList from './components/PersonList';
 
 const App = () => {
   const [ persons, setPersons ] = useState([
@@ -43,37 +46,18 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      Filter Shown with <input value = {filterName} onChange = {filterNameList} />
-      <h2>Add a new</h2>
-      <form onSubmit={onContactSubmit}>
-        <div>
-          Name: <input value = {newName} onChange = {handleNameChange} />
-          {
-            persons.forEach((person) => {
-              if(person.name === newName){
-                alert(`${newName} is already added to phonebook`)
-                setNewName('');
-              }
-            }) 
-          }
-        </div>
-        <div>
-          Number : <input value = {newNumber} onChange = {handleNumberChange}  />
-        </div>
-        <div>
-          <button type="submit">Add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2> 
-      <ul style = {{listStyle : "none"}}>
-          {
-            filterList.map(list => 
-                <li key = {uuidv4()}>
-                    {list.name} {list.number}
-                 </li>
-            )
-          }
-      </ul> 
+      <Filter inputValue = {filterName} onChangeHandler = {filterNameList} />
+      <h2>Add a new</h2> 
+      <PersonForm submitHandler = {onContactSubmit} 
+                  nameValue = {newName}
+                  nameValueHandler = {setNewName}
+                  nameChangeHandler = {handleNameChange}
+                  personsList = {persons}
+                  numberValue = {newNumber}
+                  onNumberHandler = {handleNumberChange}
+      />
+      <h2>Numbers</h2>  
+      <PersonList list = {filterList} />
     </div>
   )
 }
