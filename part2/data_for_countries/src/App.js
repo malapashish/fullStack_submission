@@ -1,16 +1,14 @@
 import React , {useState , useEffect} from 'react';
 
 import axios from 'axios';
-import { v4 as uuidv4 } from 'uuid';
-
+import { v4 as uuidv4 } from 'uuid'; 
 require('dotenv').config();
-
 
   
 
 const App = () => {
 
-    const [countries , setCountries] = useState('');
+    const [inputCountry , setInputCountry] = useState('');
     const [countryList , setCountryList] = useState([]);  
     const [selectedCountry , setSelectedCountry] = useState([]);
     const [isClicked , setIsClicked] = useState(false);
@@ -20,50 +18,29 @@ const App = () => {
     
 
 
-    useEffect(() => {
+    useEffect(() => { 
         axios
-            .get(`https://restcountries.eu/rest/v2/name/${countries}`)
+            .get(`https://restcountries.eu/rest/v2/name/${inputCountry}`)
             .then((response) => {
                 setCountryList(response.data); 
-            })
-    },[countries])
+            }) 
+    },[inputCountry])
 
-    useEffect(() => {
+    useEffect(() => { 
         axios
             .get(`http://api.weatherstack.com/current?access_key=${api_key}&query=${capital}`)
             .then((response) => {
-                setCountryWeather(response.data.current);
-                console.log(response.data.current);
-            })
+                setCountryWeather(response.data.current); 
+            }) 
     },[capital , api_key]);
 
     const handleCountryName = (event) => {
         setSelectedCountry([]); 
         setCountryWeather([]);
         setIsClicked(false);
-        setCountries(event.target.value);
-    };
- 
-
-    const renderLanguageList = (lang) => {
-            return(
-                <>
-                    <h3>Spoken Languages</h3> 
-                    <ul>
-                        {
-                            lang.map((test) => 
-                                <li key = {uuidv4()}>
-                                    {test.name}
-                                </li>
-                            )
-                        }
-                    </ul>
-                </>
-            )
-    }
+        setInputCountry(event.target.value);
+    }; 
     
-
-
     const renderResult = () => {
         if(countryList.length > 10){
             return(
@@ -94,14 +71,23 @@ const App = () => {
 
     return(
         <div>
-        Find Countries <input value = {countries} onChange = {handleCountryName} />
+        Find Countries <input value = {inputCountry} onChange = {handleCountryName} />
         {renderResult()} 
         { isClicked && (
             <div>
                 <h3>{selectedCountry.name}</h3>
                 <p>Capital : {selectedCountry.capital}</p>
                 <p>Population : {selectedCountry.population}</p>
-                {renderLanguageList(Object.values(selectedCountry.languages))} 
+                <ul>
+                    { selectedCountry && (   
+                            Object.values(selectedCountry.languages).map((language) => 
+                                    <li key = {uuidv4()}>
+                                        {language.name}
+                                    </li>
+                            ) 
+                        )
+                    }
+                </ul> 
                 <img src = {selectedCountry.flag} alt = 'Country flag' style = {{width : '200px' , height : '100px' , display : 'block'}} /> 
                 { countryWeather && (
                     <div>
