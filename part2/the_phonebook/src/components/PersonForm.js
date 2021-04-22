@@ -1,20 +1,12 @@
 import React from 'react';
 
-const PersonForm = ({ submitHandler , nameValue , nameChangeHandler , personsList , numberValue , onNumberHandler , nameValueHandle }) => {
+const PersonForm = ({ submitHandler , nameValue , nameChangeHandler , personsList , numberValue , onNumberHandler  }) => {
     
     return(
         <>  
             <form onSubmit = {submitHandler}>
                 <div>
-                    Name : <input value = {nameValue} onChange = {nameChangeHandler} />
-                    {
-                        personsList.forEach((person) => {
-                        if(person.name === nameValue){
-                            alert(`${nameValue} is already added to phonebook`)
-                            nameValueHandle('');
-                        }
-                        }) 
-                     }
+                    Name : <input value = {nameValue} onChange = {nameChangeHandler} /> 
                 </div>
                 <div>
                     Number : <input value = {numberValue} onChange = {onNumberHandler} />
