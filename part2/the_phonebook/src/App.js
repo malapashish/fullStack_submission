@@ -1,5 +1,4 @@
 import React, { useState , useEffect} from 'react';
-import axios from 'axios';
 
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
@@ -23,37 +22,23 @@ const App = () => {
   } , []);
 
   const handleNameChange = (event) => {
-    persons.forEach((person) => {
-      if(person.name === event.target.value){
-        alert(`${event.target.value} already exists`);
-        setNewName('');
-      }else{
-        setNewName(event.target.value);
-      }
-    })
-    
+    setNewName(event.target.value);
   };
     
   const handleNumberChange = (event) => {
-    persons.forEach((person) => {
-      if(person.number === event.target.value){
-        alert(`Number ${event.target.value} already exists`);
-        setNewNumber('');
-      }else{
-        setNewNumber(event.target.value);
-      }
-    })
+    setNewNumber(event.target.value);
   }
 
 
   const deleteHandler = (id , name) => {
       const question = window.confirm(`Delete ${name} ?`)
       if(question){
-      axios.delete(`http://localhost:3001/persons/${id}`)
-        .then((response) => {
-            setPersons(persons.filter((person) => person.id !== id));
-        })
-        .catch((error) => console.log(error))
+        contactServices
+                        .deleteContact(id)
+                        .then(( newNotes ) => {
+                          setPersons(persons.filter((person) => person.id !== id));
+                        })
+                        .catch((e) => console.error(e))
       }
   }
 
@@ -65,27 +50,43 @@ const App = () => {
 
 
   const onContactSubmit = (event) => {
-    if(newName  === ""){
-      alert('Please enter a name');
-      event.preventDefault(); 
-      // setNewName('');
-    }else if(newNumber === ""){
-      alert('Please enter a number');
-      event.preventDefault();
-      // setNewNumber(''); 
+    event.preventDefault();
+    if(persons.some( person => person.name === newName )){
+      const question = window.confirm(`${newName} already added to phonebook, replace old number with new number`) 
+      if(question){
+        let targetId = persons.filter( person => person.name === newName).map( person => person.id);
+        const newContactObject = {
+          name : newName ,
+          number : newNumber
+        }
+          contactServices
+                          .updateContact( targetId , newContactObject)
+                          .then((response) => {
+                            contactServices
+                                            .getContacts()
+                                            .then((response) => {
+                                              setPersons(response);
+                                              setNewName('');
+                                              setNewNumber('');
+                                            })
+                          })
     }else{
-    event.preventDefault(); 
-    const contactObject = {
-        name : newName,
-        number : newNumber
-    }  
-      contactServices 
-                      .createContact(contactObject)
-                      .then((newObject) => {
-                        setPersons(persons.concat(newObject));
-                        setNewName('');
-                        setNewNumber('');
-                      })
+      setNewName('');
+      setNewNumber('');
+    }          
+    }
+    else if(!persons.some( person => person.name === newName )){ 
+      const contactObject = {
+          name : newName,
+          number : newNumber
+      }  
+        contactServices 
+                        .createContact(contactObject)
+                        .then((newObject) => {
+                          setPersons(persons.concat(newObject));
+                          setNewName('');
+                          setNewNumber('');
+                        })
     }
   };
   
@@ -104,9 +105,6 @@ const App = () => {
                   onNumberHandler = {handleNumberChange}
       /> 
       <h2>Numbers</h2>  
-      {
-        
-      }
       <PersonList list = {filterList} deleteHandler = {deleteHandler} />
     </div>
   )
